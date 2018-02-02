@@ -6,13 +6,11 @@ public class Client {
     public String issue;
     public boolean isActive;
 
-
-    private boolean withdrawal(float qtty){
-
+    public Client(String name, int id, float balance, String issue, boolean isActive) {
+        this.name = name;
+        this.id = id;
+        this.balance = balance;
+        this.issue = issue;
+        this.isActive = isActive;
     }
-
-    private void solveIssue(){
-        System.out.println("I'm solving an important issue!");
-    }
-
 }

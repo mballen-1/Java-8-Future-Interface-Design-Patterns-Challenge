@@ -8,20 +8,24 @@ public class Bank {
 
     public static List<Client> clientsList = new ArrayList<>();
     public static Queue<Agent> agentsList = new PriorityQueue<>();
+    public static String names[] = {"Karlos", "Katherine", "Gabriela", "Pedro", "Juana", "Tito", "Fernanda", "William", "Monica", "Edilberto"};
+    public static String last_names[] = {"Rojas", "Umaña", "Quesada", "Vivas", "Lule", "Sanchez", "Niño", "Garcia", "Alvarez", "Moreno"};
+    public static String operations[] = {"Deposit,", "Withdrawal,", "SolveIssue,"};
 
     public static void main(String[] args) {
         //Utilities
         Random random_generator = new Random();
         Scanner reader = new Scanner(System.in);
-
-        //completable future requeriments
         ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-        //clients creation
+        //Clients creation
+        for(int i=0; i< 20; ++i )
+            clientsList.add(new Client(names[random_generator.nextInt()*10] + last_names[random_generator.nextInt()*10], i,random_generator.nextFloat()* 1000 , operations[random_generator.nextInt()*3]+random_generator.nextInt()*2500,true ));
 
-        System.out.println();
+        //Agents creation
+        for(int i=0; i< 20; ++i )
+            agentsList.add(new Agent(names[random_generator.nextInt()*10] + last_names[random_generator.nextInt()*10], i ));
 
-        //for(int i=0; i< )
 
         for(int k = 0; k< random_generator.nextInt() + 20; ++k) {
             Supplier<String> dispatcher = new Dispatcher(clientsList.remove(0), agentsList.poll());

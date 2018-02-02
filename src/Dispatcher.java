@@ -27,7 +27,14 @@ public class Dispatcher implements Supplier<String> {
     }
 
     public boolean withdraw(){
-
+        int quantity = Integer.parseInt(currentClient.issue.substring(11, currentClient.issue.length() - 1));
+        if( quantity <= currentClient.balance + 10 ) {
+            currentClient.balance -= quantity;
+            return true;
+        }
+        else
+            System.out.println("Not founds available!");
+            return false;
     }
 
     public boolean solveIssue(){
@@ -50,8 +57,8 @@ public class Dispatcher implements Supplier<String> {
     }
     @Override
     public String get(){
-            attend();
-            System.out.println("Running get method from Dispatcher (supplier)!");
+
+            System.out.println("Attending client...");
             Random random_generator = new Random();
             try{
                 long range = (long)15 - (long)10 + 1;
@@ -59,13 +66,14 @@ public class Dispatcher implements Supplier<String> {
                 long fraction = (long)(range * random_generator.nextDouble());
                 randomTime =  (int)(fraction + 10);
                 System.out.println(("Attention will take: " + randomTime + "seconds!"));
+                attend();
                 Thread.sleep(random_generator.nextInt(randomTime));
 
             }
             catch (InterruptedException e){
                 e.printStackTrace();
             }
-            return "Client: " + this.currentClient.name + "was attended by " + this.currentAgent.name + "in: " + randomTime;
+            return "Client: " + this.currentClient.name + "was attended by " + this.currentAgent.name + "in: " + randomTime + "miliseconds";
         }
 
 
