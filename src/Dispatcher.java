@@ -56,29 +56,30 @@ public class Dispatcher implements Supplier<String> {
             return solveIssue();
     }
     @Override
-    public String get(){
+    public String get() {
+        System.out.println("Attending client...");
+        long startTime = 0;
+        long endTime = 0;
 
-            System.out.println("Attending client...");
-            Random random_generator = new Random();
-            try{
-                long range = (long)15 - (long)10 + 1;
-                // compute a fraction of the range, 0 <= frac < range
-                long fraction = (long)(range * random_generator.nextDouble());
-                randomTime =  (int)(fraction + 10);
-                System.out.println(("Attention will take: " + randomTime + "seconds!"));
-                attend();
-                Thread.sleep(random_generator.nextInt(randomTime));
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return "Client: " + this.currentClient.name + "was attended by " + this.currentAgent.name + "in: " + randomTime + "miliseconds";
+        Random random_generator = new Random();
+        try {
+            long range = 5;
+            long fraction = (long) (range * random_generator.nextDouble());
+            randomTime = (int) (fraction + 10);
+            System.out.println(("Attention will take: " + randomTime + "seconds!"));
+            startTime = System.nanoTime();
+            attend();
+            Thread.sleep(random_generator.nextInt(randomTime));
+            endTime = System.nanoTime();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
+        long duration = endTime - startTime;
+        return "Client: " + this.currentClient.name + "was attended by " + this.currentAgent.name + "in: " + duration + "miliseconds";
 
     }
-
-
-
 }
+
+
+
+
