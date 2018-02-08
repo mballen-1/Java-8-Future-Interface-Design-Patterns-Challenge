@@ -12,6 +12,7 @@ public class Dispatcher implements Supplier<String> {
     Client currentClient;
     Agent currentAgent;
     public static int randomTime;
+    public static long startTime = 0, endTime = 0 ,duration = 0;
 
     public Dispatcher(Client currentClient, Agent currentAgent) {
         this.currentClient = currentClient;
@@ -38,7 +39,7 @@ public class Dispatcher implements Supplier<String> {
     }
 
     public boolean solveIssue(){
-        System.out.println(currentClient.issue + "Is being solved!");
+        System.out.println(currentClient.issue + "...Is being solved!");
         return true;
     }
 
@@ -57,25 +58,23 @@ public class Dispatcher implements Supplier<String> {
     }
     @Override
     public String get() {
-        System.out.println("Attending client...");
-        long startTime = 0;
-        long endTime = 0;
 
-        Random random_generator = new Random();
         try {
-            long range = 5;
-            long fraction = (long) (range * random_generator.nextDouble());
+            System.out.println("Attending client...");
+
+            Random random_generator = new Random();
+            long fraction = (long) (5* random_generator.nextDouble());
             randomTime = (int) (fraction + 10);
-            System.out.println(("Attention will take: " + randomTime + "seconds!"));
+            System.out.println(("Thread will sleep: " + randomTime + "seconds!"));
             startTime = System.nanoTime();
             attend();
-            Thread.sleep(random_generator.nextInt(randomTime));
+            Thread.sleep(1000*(randomTime));
             endTime = System.nanoTime();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        long duration = endTime - startTime;
-        return "Client: " + this.currentClient.name + "was attended by " + this.currentAgent.name + "in: " + duration + "miliseconds";
+        duration = endTime - startTime;
+        return "Client: " + this.currentClient.name + "was attended by " + this.currentAgent.name + ". .. in: " + duration/10000 + "seconds";
 
     }
 }
