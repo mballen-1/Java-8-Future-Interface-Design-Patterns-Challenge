@@ -30,11 +30,13 @@ public class Dispatcher implements Supplier<String> {
     public boolean withdraw(){
         int quantity = Integer.parseInt(currentClient.issue.substring(11, currentClient.issue.length() - 1));
         if( quantity <= currentClient.balance + 10 ) {
+            System.out.println(currentClient.name +" Withdraws: " + quantity + " OK.");
             currentClient.balance -= quantity;
             return true;
         }
         else
-            System.out.println("Not founds available!");
+            System.out.println("Withdraw by" + quantity );
+            System.out.println(currentClient.name +" balance is: " + currentClient.balance + " Not founds available!");
             return false;
     }
 
@@ -56,25 +58,29 @@ public class Dispatcher implements Supplier<String> {
         else
             return solveIssue();
     }
+    public void prepareTimeConstants(){
+        System.out.println("ATTENDING CLIENT..." + currentClient.name);
+        Random random_generator = new Random();
+        long fraction = (long) (5* random_generator.nextDouble());
+        randomTime = (int) (fraction + 10);
+        System.out.println((Thread.currentThread() + " will sleep: " + randomTime+ " seconds after attention!"));
+        startTime = System.currentTimeMillis();
+    }
+
     @Override
     public String get() {
 
         try {
-            System.out.println("Attending client...");
-
-            Random random_generator = new Random();
-            long fraction = (long) (5* random_generator.nextDouble());
-            randomTime = (int) (fraction + 10);
-            System.out.println(("Thread will sleep: " + randomTime + "seconds!"));
-            startTime = System.nanoTime();
+            prepareTimeConstants();
             attend();
             Thread.sleep(1000*(randomTime));
-            endTime = System.nanoTime();
+            endTime = System.currentTimeMillis();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         duration = endTime - startTime;
-        return "Client: " + this.currentClient.name + "was attended by " + this.currentAgent.name + ". .. in: " + duration/10000 + "seconds";
+        System.out.println("CLIENT " + currentClient.name + " SERVED SUCCESFULLY!");
+        return "Client: " + this.currentClient.name + " was attended by " + this.currentAgent.name + "(" + currentAgent.agent_type+ ")"+ "TOTAL EXECUTION TIME: " + duration/1000 + "seconds";
 
     }
 }

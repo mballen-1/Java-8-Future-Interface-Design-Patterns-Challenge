@@ -14,16 +14,18 @@ public class Bank {
         }
     });
 
-    public static String names[] = {"Karlos", "Katherine", "Gabriela", "Pedro", "Juana", "Tito", "Fernanda", "William", "Monica", "Edilberto"};
-    public static String last_names[] = {"Rojas", "Umaña", "Quesada", "Vivas", "Lule", "Sanchez", "Niño", "Garcia", "Alvarez", "Moreno"};
+    public static String names[] = {"Karlos", "Katherine", "Gabriela", "Pedro", "Juana", "Tito", "Fernanda",
+            "William", "Monica", "Edilberto", "Jimena", "Tulio", "Eliana", "Cristian", "Cristina", "Celso", "Catalina"};
+    public static String last_names[] = {"Rojas", "Umaña", "Quesada", "Vivas", "Lule", "Sanchez", "Niño", "Garcia",
+            "Alvarez", "Moreno","Gutierrez", "Osorio", "Andrade", "Nuñez", "Flores", "Bogota", "Bocanegra", "Soto" };
     public static String operations[] = {"Deposit,", "Withdrawal,", "SolveIssue,"};
 
     public static String generateParameter( String option ){
-        if(option.charAt(0) != 'S' && option.charAt(0) != 's' ) {
+        if(option.charAt(0) != 'S' || option.charAt(0) != 's' ) {
             Random random_generator = new Random();
             return "" + random_generator.nextInt();
         }
-        return "I have a issue with my account!";
+        return "I have a issue with my account...";
     }
     public static void main(String[] args) {
         //Utilities
@@ -31,21 +33,21 @@ public class Bank {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
 
         //Clients creation
-        for(int i=0; i< 30; ++i )
-            clientsList.add(new Client(names[random_generator.nextInt(10)] +" "+ last_names[random_generator.nextInt(10)], i,random_generator.nextInt()* 100000 , operations[ random_generator.nextInt(3)]+ generateParameter(operations[ random_generator.nextInt(3)] ),true ));
+        for(int i=0; i< 50; ++i )
+            clientsList.add(new Client(names[random_generator.nextInt(16)] +" "+ last_names[random_generator.nextInt(18)], i,random_generator.nextInt(1000000000)  , operations[ random_generator.nextInt(3)]+ generateParameter(operations[ random_generator.nextInt(3)] ),true ));
 
         //Agents creation
-        for(int i=0; i< 10; ++i ){
-            agentPriorityQueue.add(new Agent(names[random_generator.nextInt(10)] + " "+ last_names[random_generator.nextInt(10)], i ,random_generator.nextInt(3)));
+        for(int i=0; i< 800; ++i ){
+            agentPriorityQueue.add(new Agent(names[random_generator.nextInt(16)] + " "+ last_names[random_generator.nextInt(18)], i ,random_generator.nextInt(3)));
         }
 
         while(!clientsList.isEmpty()) {
             Agent current_agent = agentPriorityQueue.poll();
             Supplier<String> dispatcher = new Dispatcher(clientsList.remove(0), current_agent );
-            agentPriorityQueue.add(current_agent);     
             CompletableFuture
                     .supplyAsync(dispatcher, executorService)
                     .thenAccept(result -> System.out.println(result));
+            System.out.println("CLIENTS IN LIST:"+clientsList.size());
             agentPriorityQueue.add(current_agent);
         }
             executorService.shutdown();
